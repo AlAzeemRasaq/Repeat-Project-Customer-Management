@@ -6,7 +6,13 @@ using namespace std;
 
 class Customer {
 private:
-public: //getters and setters
+    int CustomerID;
+    string title;
+    string name;
+    int purchaseCount;
+    string type;
+    int *purchase;
+public:
     int getCustomerId() const;
     void setCustomerId(int customerId);
     const string &getTitle() const;
@@ -20,28 +26,12 @@ public: //getters and setters
     const string &getType() const;
     void setType(const string &type);
 
-private:
-    int CustomerID;
-    string title, name;
-    int purchaseCount, purchase[];
-    string type;
-public:
-    void addCustomer();
-    void displayCustomers();
-    void findCustomer();
-    void findByPurchase();
-    void manageData();
-
-    Customer(int customerID, string name, string title, int purchaseCount, int purchase[purchaseCount], string type); // full constructor
-    Customer();
-
-    explicit Customer(int **purchase);
-
-    // default constructor
+    Customer(int customerID, string name, string title, int purchaseCount, int purchase[], string type); // full constructor
+    Customer(); // default constructor
     ~Customer(); // destructor
 };
 
-std::ostream& operator<<(ostream& os, Customer& customer) { // main operator
+inline std::ostream& operator<<(ostream& os, Customer& customer) { // main operator
     return os << "Customer: [" <<
         customer.getCustomerId() << ", " <<
         customer.getName() << ", " <<
@@ -51,5 +41,19 @@ std::ostream& operator<<(ostream& os, Customer& customer) { // main operator
         customer.getType() <<
     "]";
 }
+
+inline Customer::Customer(int customerID, string name, string title, int purchaseCount, int purchase[], string type) { // full constructor defined
+    this->setCustomerId(customerID);
+    this->setName(name);
+    this->setTitle(title);
+    this->setPurchaseCount(purchaseCount);
+    this->setPurchase(purchase);
+    this->setType(type);
+}
+inline Customer::Customer() { // default constructor defined
+    this->setCustomerId(1234);
+    this->setName("Name");
+}
+inline Customer::~Customer() {} // destructor defined
 
 #endif //CLASSES_CUSTOMER_H
