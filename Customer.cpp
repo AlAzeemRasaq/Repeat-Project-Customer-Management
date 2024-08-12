@@ -1,19 +1,4 @@
 #include "Customer.h"
-void Customer::addCustomer() {
-
-}
-void Customer::displayCustomers() {
-
-}
-void Customer::findCustomer() {
-
-}
-void Customer::findByPurchase() {
-
-}
-void Customer::manageData() {
-
-}
 
 int Customer::getCustomerId() const {
     return CustomerID;
@@ -50,8 +35,4 @@ const string &Customer::getType() const {
 }
 void Customer::setType(const string &type) {
     Customer::type = type;
-}
-
-Customer::Customer(int **purchase) : purchase(purchase) {
-
 }
