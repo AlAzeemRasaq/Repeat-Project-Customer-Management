@@ -152,11 +152,12 @@ const Customer* findCustomer(int customerId) {
     return nullptr; // Customer not found
 }
 
-const Customer* findByPurchase(int *purchaseNumber) {
-    for (int i = 0; i < allCustomers.size(); i++) {
-        for (int j = 0; j < allCustomers[i].getPurchaseCount(); j++) {
-            if (allCustomers[i].getPurchase() == purchaseNumber) {
-                return &allCustomers[i];
+const Customer* findByPurchase(int purchaseNumber) {
+    for (const auto& customer : allCustomers) {
+        int* purchases = customer.getPurchase(); // Assuming getPurchase() returns a pointer to the array
+        for (int i = 0; i < customer.getPurchaseCount(); i++) {
+            if (purchases[i] == purchaseNumber) {
+                return &customer;
             }
         }
     }
@@ -168,7 +169,11 @@ void saveCustomerData(const std::vector<Customer>& customers) {
     std::ofstream file("customers.txt");
     if (file.is_open()) {
         for (const Customer& customer : customers) {
-            file << customer.getCustomerId() << " " << customer.getTitle() << " " << customer.getName() << " " << customer.getPurchaseCount() << " " << customer.getType() << std::endl;
+            file << customer.getCustomerId() << " "
+                 << customer.getTitle() << " "
+                 << customer.getName() << " "
+                 << customer.getPurchaseCount() << " "
+                 << customer.getType() << std::endl;
             for (int i = 0; i < customer.getPurchaseCount(); i++) {
                 file << customer.getPurchase() << " ";
             }
@@ -185,6 +190,7 @@ void loadCustomerData() {
     std::ifstream file("customers.txt");
     vector<Customer> customers;
     if (file.is_open()) {
+        allCustomers.clear();
         int id, purchaseCount;
         std::string title, name, type;
         while (file >> id >> title >> name >> purchaseCount >> type) {
