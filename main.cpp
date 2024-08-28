@@ -17,14 +17,13 @@ int main() {
     int menu;
     do {
         std::cout
-                << "Menu:\n"
-                   "1. Add customer\n"
+                << "1. Add customer\n"
                    "2. Display all customers\n"
                    "3. Find customer\n"
                    "4. Find customer by purchase number\n"
                    "5. Load/store data\n"
                    "6. Exit\n";
-        std::cout << "Enter your choice: ";
+        std::cout << "Enter your choice:  ";
         std::cin >> menu;
 
         switch(menu) {
@@ -34,11 +33,41 @@ int main() {
             case 2:
                 displayCustomers();
                 break;
-            case 3:
+            case 3: {
+                int id;
+                std::cout << "Enter Customer ID: ";
+                std::cin >> id;
+                const Customer* customer = findCustomer(id);
+                if (customer) {
+                    std::cout << "Customer found: " << customer->getName() << std::endl;
+                } else {
+                    std::cout << "Customer not found.\n";
+                }
                 break;
-            case 4:
+            }
+            case 4: {
+                int purchaseNumber;
+                std::cout << "Enter Purchase Number: ";
+                std::cin >> purchaseNumber;
+                const Customer *customer = findByPurchase(purchaseNumber);
+                if (customer) {
+                    std::cout << "Customer found: " << customer->getName() << std::endl;
+                } else {
+                    std::cout << "Customer not found by purchase number.\n";
+                }
                 break;
+            }
             case 5:
+                char choice;
+                std::cout << "Do you want to load (L) or store (S) data? ";
+                std::cin >> choice;
+                if (choice == 'L' || choice == 'l') {
+                    loadCustomerData();
+                } else if (choice == 'S' || choice == 's') {
+                    saveCustomerData(allCustomers);
+                } else {
+                    std::cout << "Invalid choice.\n";
+                }
                 break;
             case 6:
                 cout << "Goodbye\n";
@@ -109,7 +138,7 @@ void addCustomer() {
 void displayCustomers() {
     for (int i = 0; i < allCustomers.size(); i++) {
         cout << allCustomers[i] << endl;
-        cout << "Sort by name or title?" << endl;
+        cout << "Display by name or title?" << endl;
         allCustomers[i].getName();
     }
 }
