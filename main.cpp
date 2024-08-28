@@ -81,72 +81,69 @@ int main() {
 }
 
 void addCustomer() {
-    int id = 0,
-        purchaseCount = 1,
-        purchase = 0;
-    string title,
-           name,
-           type;
+    int id = 0, purchaseCount = 0;
+    string title, name, type;
 
-    cout << "Enter id: " << endl;
-    while (id < 1) {
-        if (id < 1) {
-            cin >> id;
-            cout << "Invalid. Try again." << endl;
-        }
+    cout << "Enter id: ";
+    while (!(cin >> id) || id < 1) {
+        cin >> id;
+        cout << "Invalid. Try again." << endl;
+        cin.clear();
     }
 
-    cout << "Enter title: " << endl;
+    cout << "Enter title: ";
+    cin.ignore(); // Clear input buffer
+    getline(cin, title);
     while (title.length() < 2) {
-        if (title.length() < 2) {
-            cin >> title;
-            cout << "Too short." << endl;
-        }
+        cout << "Too short. Enter title: ";
+        getline(cin, title);
     }
 
-    cout << "Enter name: " << endl;
+    cout << "Enter name: ";
+    getline(cin, name);
     while (name.length() < 4) {
-        if (name.length() < 4) {
-            cin >> name;
-            cout << "Too short." << endl;
-        }
+        cout << "Too short. Enter name: ";
+        getline(cin, name);
     }
 
-    cout << "Enter purchase count: " << endl;
-    while (purchaseCount < 0 || purchaseCount > 10000) {
-        cin >> purchaseCount;
+    cout << "Enter purchase count: ";
+    while (!(cin >> purchaseCount) || purchaseCount < 0 || purchaseCount > 10000) {
+        cout << "Invalid count. Enter purchase count: ";
+        cin.clear();
     }
 
-    cout << "Enter purchases: " << endl;
-    int purchases[purchaseCount];
+    int *purchases = new int[purchaseCount];
+    cout << "Enter purchases: ";
     for (int i = 0; i < purchaseCount; i++) {
-        cin >> purchases[i];
-    }
-
-    cout << "New or regular? " << endl;
-    while (type!="New" || type!="Regular") {
-        if (type!="New" || type!="Regular") {
-            cin >> type;
-            cout << "Invalid." << endl;
+        while (!(cin >> purchases[i])) {
+            cout << "Invalid purchase value. Try again: ";
+            cin.clear();
         }
     }
-    Customer custom(id, name, title, purchaseCount, purchases, type); // creation of an object
 
+    cout << "New or regular? ";
+    cin.ignore(); // Clear input buffer
+    getline(cin, type);
+    while (type != "New" && type != "Regular") {
+        cout << "Invalid. Enter 'New' or 'Regular': ";
+        getline(cin, type);
+    }
+
+    Customer custom(id, name, title, purchaseCount, purchases, type); // creation of an object
     allCustomers.push_back(custom);
+    cout << "Customer added successfully.\n";
 }
 
 void displayCustomers() {
     for (int i = 0; i < allCustomers.size(); i++) {
         cout << allCustomers[i] << endl;
-        cout << "Display by name or title?" << endl;
-        allCustomers[i].getName();
     }
 }
 
 const Customer* findCustomer(int customerId) {
-    for (int i = 0; i < allCustomers.size(); i++) {
-        if (allCustomers[i].getCustomerId() == customerId) {
-            return &allCustomers[i];
+    for (const auto& customer : allCustomers) {
+        if (customer.getCustomerId() == customerId) {
+            return &customer;
         }
     }
     return nullptr; // Customer not found
